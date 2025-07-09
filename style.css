@@ -1,35 +1,269 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #ffffff;
+    font-family: 'Orbitron', monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255, 119, 198, 0.1) 0%, transparent 50%);
+    z-index: -1;
+}
+
+.game-wrapper {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+    margin-bottom: 3rem;
+}
+
+.header h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-shift 3s ease-in-out infinite;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+}
+
+@keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.score-container {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 1rem;
+}
+
+.score-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #282c34;
-    color: white;
-    font-family: Arial, sans-serif;
+    gap: 0.5rem;
 }
+
+.score-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.score-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #00d4ff;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
 .game-container {
     display: grid;
-    grid-template-columns: repeat(2, 100px);
-    gap: 10px;
+    grid-template-columns: repeat(2, 120px);
+    gap: 15px;
+    margin-bottom: 3rem;
+    perspective: 1000px;
+    justify-content: center;
+    justify-items: center;
 }
+
 .tile {
-    width: 100px;
-    height: 100px;
-    border-radius: 10px;
+    width: 120px;
+    height: 120px;
+    border-radius: 15px;
     cursor: pointer;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1);
 }
-.red { background-color: red; }
-.blue { background-color: blue; }
-.green { background-color: green; }
-.yellow { background-color: yellow; }
-.active {
-    opacity: 0.5;
+
+.tile-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 13px;
+    background: inherit;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.tile:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.tile:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
+.red {
+    background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+}
+
+.red:hover {
+    background: linear-gradient(135deg, #ff6b7a 0%, #ff4757 100%);
+}
+
+.blue {
+    background: linear-gradient(135deg, #3742fa 0%, #2f3542 100%);
+}
+
+.blue:hover {
+    background: linear-gradient(135deg, #5352ed 0%, #3742fa 100%);
+}
+
+.green {
+    background: linear-gradient(135deg, #2ed573 0%, #1e824c 100%);
+}
+
+.green:hover {
+    background: linear-gradient(135deg, #7bed9f 0%, #2ed573 100%);
+}
+
+.yellow {
+    background: linear-gradient(135deg, #ffa502 0%, #ff6348 100%);
+}
+
+.yellow:hover {
+    background: linear-gradient(135deg, #ffb142 0%, #ffa502 100%);
+}
+
+.tile.active {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 
+        0 0 30px rgba(255, 255, 255, 0.6),
+        0 0 60px rgba(255, 255, 255, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.tile.active .tile-inner {
+    background: rgba(255, 255, 255, 0.3);
+}
+
 #start-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Orbitron', monospace;
+    color: #ffffff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 50px;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 8px 32px rgba(102, 126, 234, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+#start-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+#start-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 12px 40px rgba(102, 126, 234, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+#start-button:hover::before {
+    left: 100%;
+}
+
+#start-button:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 4px 16px rgba(102, 126, 234, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+#start-button span {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .game-wrapper {
+        padding: 1.5rem;
+    }
+    
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .game-container {
+        grid-template-columns: repeat(2, 100px);
+        gap: 12px;
+    }
+    
+    .tile {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .score-container {
+        gap: 2rem;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.pulse {
+    animation: pulse 0.5s ease-in-out;
 }

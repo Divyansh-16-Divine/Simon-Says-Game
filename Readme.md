@@ -60,8 +60,3 @@ You can modify:
 - Animation timing in `app.js`
 - Grid layout and sizing
 - Game difficulty by adjusting delays
-
-
-
-
-
